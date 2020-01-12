@@ -1,6 +1,7 @@
 package com.assignment.codehub.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,6 +21,11 @@ public interface UserRepository extends JpaRepository<User,Long>{
 	@Query(value = "from User u")
 	List<User> findAll(Sort sort);
 	
-	@Query(value = "select * from user",nativeQuery = true)
+	@Query(value = "select * from user where deleted=false",nativeQuery = true)
 	List<User> findAllTry();
-}
+
+	/*
+	 * Optional<User> findByUsername(String username); // just for spring
+	 * userdetails service
+	 */
+	}
