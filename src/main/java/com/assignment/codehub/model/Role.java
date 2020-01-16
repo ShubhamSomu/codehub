@@ -1,13 +1,7 @@
 package com.assignment.codehub.model;
 
-import java.time.LocalDateTime;
-import java.util.Set;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import com.assignment.codehub.model.User.UserBuilder;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,7 +18,7 @@ import lombok.Setter;
 @Setter(value = AccessLevel.PUBLIC)
 @Getter
 public class Role extends BaseEntity {
-
+	private static final long serialVersionUID = 1L;
 	String role;
 
 }

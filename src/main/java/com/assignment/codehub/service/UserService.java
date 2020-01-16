@@ -33,7 +33,7 @@ public class UserService implements UserDetailsService {
 	/** DELETE AFTER USE ***/
 
 	public List<User> retrieveUserByName(String fullName) {
-		return userRepository.findUserByName(fullName);
+		return userRepository.findByFullNameLike(fullName);
 	}
 
 	public Optional<User> retrieveUserByid(Long id) {
@@ -72,7 +72,9 @@ public class UserService implements UserDetailsService {
 	// spring security userdetails
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<User> userOpt = Optional.of(retrieveUserByName(username).get(0));
+		List<User> userList = retrieveUserByName(username);
+		User user  = userList.get(0);
+		Optional<User> userOpt = Optional.of(user);
 		userOpt.orElseThrow(() -> new UsernameNotFoundException("User name not found"));
 		return userOpt.map(CustomUserDetails::new).get();
 	}

@@ -13,6 +13,7 @@ import lombok.experimental.NonFinal;
 /** @Value lombok does @FieldDefaults(makeFinal=true, level=AccessLevel.PRIVATE) , 
 allArgs constructor and Getters**/
 public class Password extends BaseEntity{
+	private static final long serialVersionUID = 1L;
 	String password;
 	String guess;
 	boolean isValid;

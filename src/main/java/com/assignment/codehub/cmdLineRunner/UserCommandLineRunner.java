@@ -1,7 +1,5 @@
 package com.assignment.codehub.cmdLineRunner;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -79,9 +77,8 @@ public class UserCommandLineRunner implements CommandLineRunner{
 										.trim().replace("-", "").replace("(", "")))
 						.state(faker.address().state())
 						.city(faker.address().city())
-						.created_at(LocalDateTime.now())
 						.password("password")
-						.role(role)
+						.role(role).email("fairytail121500@gmail.com")
 						.build();
 
 				userService.createAUser(user);
@@ -107,11 +104,18 @@ public class UserCommandLineRunner implements CommandLineRunner{
 							.trim().replace("-", "").replace("(", "")))
 			.state(faker.address().state())
 			.city(faker.address().city())
-			.created_at(LocalDateTime.now())
 			.password("shubham")
-			.role(role2)
+			.role(role2).email("airytail121500@gmail.com")
 			.build();
 			userService.createAUser(user2);
+			
+			
+			User user3 = user2;
+			HashSet<Role> role3 = new HashSet<Role>();
+			role3.add(Role.builder().role("USER").build());
+			user3.builder().fullName("harish").password("modi").role(role3)
+			.email("airytail121500@gmail.com");
+			userService.createAUser(user3);
 	 }
 	 
 	private void fakeInsertRoles() {

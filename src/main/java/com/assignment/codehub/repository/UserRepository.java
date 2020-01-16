@@ -15,8 +15,8 @@ public interface UserRepository extends JpaRepository<User,Long>{
 	@Query(value = "from User u where u.id = ?1")
 	List<User> findAllById(Long id);
 	
-	@Query(value = "from User u where u.fullName like ?1")
-	List<User> findUserByName(String fullName);
+	//@Query(value = "from User u where u.fullName like ?1")
+	List<User> findByFullNameLike(String fullName);
 	
 	@Query(value = "from User u")
 	List<User> findAll(Sort sort);

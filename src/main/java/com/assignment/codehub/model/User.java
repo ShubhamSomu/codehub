@@ -1,8 +1,10 @@
 package com.assignment.codehub.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,16 +13,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.PreRemove;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.ResultCheckStyle;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -74,20 +74,20 @@ public class User extends BaseEntity {
 	@Size(min = 3, message = "name should be atleast 3 char long")
 	private String fullName;
 
+	@Column(/* unique=true, nullable = false*/)
+	@Email(regexp = "^(.+)@(.+)$")
+	@NotNull
+	@JsonProperty("email")
+	private String email;
+	
 	@ToString.Include
 	// @NotNull(message = "company cannot be null")
 	@JsonProperty("company")
 	String company;
 
 	@ToString.Include
-	@JsonProperty("created_at")
-	// @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="dd-MM-yyyy hh:ss")
-	@Column(nullable = false)
-	LocalDateTime created_at;
-
-	@ToString.Include
 	@JsonProperty("user_type")
-	Integer type;
+	Integer type; // user can be a single user or a organisation
 
 	@JsonProperty("is_fake")
 	Boolean fake;
@@ -118,7 +118,7 @@ public class User extends BaseEntity {
 	String password;
 
 	@JsonIgnore
-	  @ManyToMany(fetch=FetchType.EAGER)
+	  @ManyToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	  @JoinTable(
 		        name="user_role",
 		        joinColumns=
@@ -126,9 +126,20 @@ public class User extends BaseEntity {
 		        inverseJoinColumns=
 		            @JoinColumn(name="role_id", referencedColumnName="id")
 		    )
-	@Cascade(CascadeType.ALL)
 	  Set<Role> role;
 
+	
+	  @ManyToMany(fetch=FetchType.LAZY,cascade = CascadeType.ALL)
+	  @JoinTable(name="user_repository", joinColumns = {
+	  
+	  @JoinColumn(name="user_id", referencedColumnName = "id") },
+	  inverseJoinColumns = {
+	  
+	  @JoinColumn(name="project_id", referencedColumnName="id") } ) 
+	  List<Project> projects;
+	 
+	
+	
 	@PreRemove
 	public void delete() {
 		this.deleted = true;
@@ -138,7 +149,7 @@ public class User extends BaseEntity {
 		this.city = user.city;
 		this.company = user.company;
 		this.countrycode = user.countrycode;
-		this.created_at = user.created_at;
+
 		this.deleted = user.deleted;
 		this.fake = user.fake;
 		this.fullName = user.fullName;
